@@ -17,13 +17,13 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(1200, 300); // 캔버스 크기를 2배로 확대
+  createCanvas(1200, 300); 
   dino = new Dino();
   obstacles.push(new Obstacle());
 }
 
 function draw() {
-  background(220);
+  background(102,153,255);
 
   if (!gameOverFlag) {
     // Display score
