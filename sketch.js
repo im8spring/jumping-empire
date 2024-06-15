@@ -70,7 +70,7 @@ function draw() {
     text('Press Space to Restart', width / 2, height / 2 + 50); // 위치를 조금 이동
   }
 }
-
+  
 function keyPressed() {
   if (key === ' ') {
     if (gameOverFlag) {
