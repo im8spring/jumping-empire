@@ -8,6 +8,10 @@ let currentSpriteIndex = 0;
 let spriteUpdateInterval = 5;
 
 let jumpImage;
+let titleImage;
+let rdrImage;
+let profImage;
+let overImage;
 
 const GAME_WIDTH = 1200;
 const GAME_HEIGHT = 300;
@@ -16,33 +20,47 @@ const GAME_Y_OFFSET = 200;
 
 function preload() {
   for (let i = 0; i <= 6; i++) {
-    dinoSprites.push(loadImage('assets/image_' + i + '.png'));
+    dinoSprites.push(loadImage(`assets/image_${i}.png`));
   }
   jumpImage = loadImage('assets/jump.png');
+  titleImage = loadImage('assets/title.png');
+  rdrImage = loadImage('assets/rdr.gif');
+  profImage = loadImage('assets/prof.png');
+  overImage = loadImage('assets/over.png');
 }
 
 function setup() {
-  createCanvas(1300, 1000); // 캔버스를 더 크게 만듦
+  createCanvas(1300, 800);
   dino = new Dino();
   obstacles.push(new Obstacle());
+
+  rdrImageElement = createImg('assets/rdr.gif');
+  rdrImageElement.position((width - rdrImageElement.width / 2) / 2, height - rdrImageElement.height - 250);
+  rdrImageElement.style('width', '20%');
+  rdrImageElement.style('height', 'auto');
+
+  profImageElement = createImg('assets/prof.png');
+  let profWidth = profImage.width * 0.3;
+  let profHeight = profImage.height * 0.3;
+  profImageElement.position((GAME_WIDTH - profWidth) / 0.9, GAME_HEIGHT + 250);
+  profImageElement.style('width', `${profWidth}px`);
+  profImageElement.style('height', `${profHeight}px`);
 }
 
 function draw() {
-  background(000,051,000);
-  
-  // 게임 영역을 설정
+  background(0, 51, 0);
   push();
   translate(GAME_X_OFFSET, GAME_Y_OFFSET);
-  stroke(255);
-  noFill();
-  fill(051,000,000)
-  rect(0, 0, GAME_WIDTH, GAME_HEIGHT); // 게임 영역을 나타내는 사각형
-  
-  if (!gameOverFlag) {
-    textSize(40);
-    fill(255);
-    text('Score: ' + score, 20, 50);
 
+  let titleWidth = titleImage.width * 0.3;
+  let titleHeight = titleImage.height * 0.3;
+  image(titleImage, (GAME_WIDTH - titleWidth) / 2, -titleHeight - 10, titleWidth, titleHeight);
+
+  fill(51, 0, 0);
+  rect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+  if (!gameOverFlag) {
+    displayScore();
     dino.update();
     dino.show();
 
@@ -68,12 +86,11 @@ function draw() {
       currentSpriteIndex = (currentSpriteIndex + 1) % dinoSprites.length;
     }
   } else {
-    textSize(64);
-    textAlign(CENTER, CENTER);
-    fill(255, 0, 0);
-    text('Game Over', GAME_WIDTH / 2, GAME_HEIGHT / 2);
+    image(overImage, GAME_WIDTH / 2 - overImage.width / 2, GAME_HEIGHT / 2 - overImage.height / 2);
     textSize(40);
-    text('Press Space to Restart', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 50);
+    textAlign(CENTER, CENTER);
+    fill(255);
+    text('Press Space to Restart', GAME_WIDTH / 2, GAME_HEIGHT / 2 + overImage.height / 2 + 20);
   }
 
   pop();
@@ -101,6 +118,12 @@ function resetGame() {
   gameOverFlag = false;
   dino = new Dino();
   loop();
+}
+
+function displayScore() {
+  textSize(40);
+  fill(255);
+  text(`Score: ${score}`, 20, 50);
 }
 
 class Dino {
@@ -162,10 +185,14 @@ class Obstacle {
   }
 
   hits(dino) {
-    return (
+    if (
       dino.x + 100 > this.x &&
       dino.x < this.x + this.width &&
       dino.y + 100 > this.y
-    );
+    ) {
+      gameOver();
+      return true;
+    }
+    return false;
   }
 }
