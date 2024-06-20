@@ -176,7 +176,7 @@ class Obstacle {
   }
 
   offscreen() {
-    return this.x + this.width < 0;
+    return this.x + this.width < 0; 
   }
 
   hits(dino) {
