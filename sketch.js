@@ -86,11 +86,12 @@ function draw() {
       currentSpriteIndex = (currentSpriteIndex + 1) % dinoSprites.length;
     }
   } else {
-    image(overImage, GAME_WIDTH / 2 - overImage.width / 2, GAME_HEIGHT / 2 - overImage.height / 2);
+    // 게임 오버 이미지 전체 화면에 출력
+    image(overImage, 0, 0, width, height);
     textSize(40);
     textAlign(CENTER, CENTER);
     fill(255);
-    text('Press Space to Restart', GAME_WIDTH / 2, GAME_HEIGHT / 2 + overImage.height / 2 + 20);
+    text('Press Space to Restart', width / 2, height / 2 + overImage.height / 2 + 20);
   }
 
   pop();
