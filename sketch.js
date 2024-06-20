@@ -9,7 +9,6 @@ let spriteUpdateInterval = 5;
 
 let jumpImage;
 let titleImage;
-let rdrImage;
 let profImage;
 let overImage;
 
@@ -24,7 +23,6 @@ function preload() {
   }
   jumpImage = loadImage('assets/jump.png');
   titleImage = loadImage('assets/title.png');
-  rdrImage = loadImage('assets/rdr.gif');
   profImage = loadImage('assets/prof.png');
   overImage = loadImage('assets/over.png');
 }
@@ -34,15 +32,10 @@ function setup() {
   dino = new Dino();
   obstacles.push(new Obstacle());
 
-  rdrImageElement = createImg('assets/rdr.gif');
-  rdrImageElement.position((width - rdrImageElement.width / 2) / 2, height - rdrImageElement.height - 250);
-  rdrImageElement.style('width', '20%');
-  rdrImageElement.style('height', 'auto');
-
   profImageElement = createImg('assets/prof.png');
-  let profWidth = profImage.width * 0.3;
-  let profHeight = profImage.height * 0.3;
-  profImageElement.position((GAME_WIDTH - profWidth) / 0.9, GAME_HEIGHT + 250);
+  let profWidth = profImage.width * 0.38;
+  let profHeight = profImage.height * 0.38;
+  profImageElement.position((GAME_WIDTH - profWidth) / 2 + 70, GAME_HEIGHT + 210);
   profImageElement.style('width', `${profWidth}px`);
   profImageElement.style('height', `${profHeight}px`);
 }
@@ -86,14 +79,16 @@ function draw() {
       currentSpriteIndex = (currentSpriteIndex + 1) % dinoSprites.length;
     }
   } else {
-    // 게임 오버 이미지 전체 화면에 출력
-    image(overImage, 0, 0, width, height);
+    let scaledHeight = height * 0.4; // 80% of the canvas height
+    let scaledWidth = (overImage.width / overImage.height) * scaledHeight;
+    image(overImage, (width - scaledWidth) / 2, (height - scaledHeight) / 2 - 230, scaledWidth, scaledHeight);
+
     textSize(40);
     textAlign(CENTER, CENTER);
     fill(255);
-    text('Press Space to Restart', width / 2, height / 2 + overImage.height / 2 + 20);
+    text('Press Space to Restart', width / 2, (height - scaledHeight) / 2 - 50 + scaledHeight + 20);
+    noLoop();
   }
-
   pop();
 }
 
@@ -108,7 +103,6 @@ function keyPressed() {
 }
 
 function gameOver() {
-  noLoop();
   gameOverFlag = true;
   console.log('Game Over');
 }
